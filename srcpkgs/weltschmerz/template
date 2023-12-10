@@ -1,0 +1,18 @@
+# Template file for 'weltschmerz'
+pkgname=weltschmerz
+version=1.6.0
+revision=1
+build_style=gnu-makefile
+hostmakedepends="gettext glib-devel pkg-config vala"
+makedepends="gtk+3-devel vala-devel vte3-devel"
+short_desc="Small and simple VTE-based terminal emulator, written in Vala"
+maintainer="Maeve Sproule <code@sprock.dev>"
+license="ISC"
+homepage="https://oriole.systems/posts/weltschmerz"
+changelog="https://git.oriole.systems/weltschmerz/plain/NEWS"
+distfiles="https://git.oriole.systems/weltschmerz/snapshot/weltschmerz-${version}.tar.gz"
+checksum=44edfdc4e71a68b258c8d20514a6b9cd6942f9ecd247d93ba718002c9b135c0d
+
+post_install() {
+	vlicense LICENSE
+}
