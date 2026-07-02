@@ -1,0 +1,22 @@
+# Template file for 'reform2_lpc-dkms'
+pkgname=reform2_lpc-dkms
+version=1.87
+revision=1
+depends="dkms"
+short_desc="Kernel module for the MNT Reform's LPC11U24 system controller"
+maintainer="Maeve Sproule <code@sprock.dev>"
+license="GPL-3.0-or-later"
+homepage="https://source.mnt.re/reform/reform-tools"
+changelog="https://source.mnt.re/reform/reform-tools/-/raw/main/CHANGELOG.md"
+distfiles="https://source.mnt.re/reform/reform-tools/-/archive/${version}/reform-tools-${version}.tar.bz2"
+checksum=a32f95c65de3c1b086baefce8e0c570f03aef0bf50412f004a6317bcfd4b4ce0
+
+dkms_modules="reform2_lpc ${version}"
+
+do_install() {
+	cp "${FILESDIR}/dkms.conf" "lpc/"
+	vsed -i "lpc/dkms.conf" -e "s/@@VERSION@@/${version}/"
+
+	vmkdir "usr/src/reform2_lpc-${version}"
+	vcopy "lpc/*" "usr/src/reform2_lpc-${version}/"
+}
