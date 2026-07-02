@@ -1,0 +1,2 @@
+site="https://source.mnt.re/reform/reform-tools/-/tags"
+pattern='<a href="/reform/reform-tools/-/tags/[\d.]+">\K[\d.]+(?=</a>)'
