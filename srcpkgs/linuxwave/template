@@ -3,6 +3,7 @@ pkgname=linuxwave
 version=0.2.0
 revision=1
 build_style=zig-build
+broken="Not updated to zig 0.16, which I bumped to build river 0.4"
 short_desc="Generate music from the entropy of Linux"
 maintainer="tranzystorekk <tranzystorek.io@protonmail.com>"
 license="MIT"

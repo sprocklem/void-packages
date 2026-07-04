@@ -3,6 +3,7 @@ pkgname=zls
 version=0.13.0
 revision=1
 build_style=zig-build
+broken="Not updated to zig 0.16, which I bumped to build river 0.4"
 configure_args="-Dpie"
 short_desc="Zig language server"
 maintainer="Orphaned <orphan@voidlinux.org>"
