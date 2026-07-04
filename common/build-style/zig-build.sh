@@ -7,9 +7,11 @@ do_build() {
 	if [ "$CROSS_BUILD" ]; then
 		zig_target="${XBPS_CROSS_ZIG_TARGET}"
 		zig_cpu="${XBPS_CROSS_ZIG_CPU}"
+		zig_search_prefix=/
 	else
 		zig_target="${XBPS_ZIG_TARGET}"
 		zig_cpu="${XBPS_ZIG_CPU}"
+		zig_search_prefix=/usr
 	fi
 
 	# Inform zig of the required libc include paths.
@@ -30,8 +32,8 @@ do_build() {
 	# prefix used by the zig build system.
 	DESTDIR="zig-out" zig build \
 		${makejobs} \
-		--sysroot "${XBPS_CROSS_BASE}" \
-		--search-prefix "${XBPS_CROSS_BASE}/usr" \
+		--sysroot "${XBPS_CROSS_BASE:-/}" \
+		--search-prefix "${zig_search_prefix}" \
 		--prefix /usr \
 		--global-cache-dir /host/zig \
 		--libc xbps_zig_libc.txt \

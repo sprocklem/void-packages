@@ -3,6 +3,7 @@ pkgname=ncdu2
 version=2.7
 revision=1
 build_style=zig-build
+broken="Not updated to zig 0.16, which I bumped to build river 0.4"
 configure_args="-Dpie"
 hostmakedepends="pkg-config"
 makedepends="libzstd-devel ncurses-devel"
