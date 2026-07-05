@@ -1,0 +1,19 @@
+# Template file for 'kwm'
+pkgname=kwm
+version=0.3.0
+revision=1
+archs="~i686* ~armv6l* ~armv7l"
+build_style=zig-build
+configure_args="-Dpie -Dllvm $(vopt_bool bar bar)"
+hostmakedepends="pkg-config"
+makedepends="libxkbcommon-devel wayland-devel wayland-protocols $(vopt_if bar 'fcft-devel pixman-devel')"
+short_desc="DWM-like dynamic tiling window manager for the River compositor"
+maintainer="Maeve Sproule <code@sprock.dev>"
+license="GPL-3.0-only"
+homepage="https://github.com/kewuaa/kvm"
+distfiles="https://github.com/kewuaa/kwm/archive/refs/tags/v${version}.tar.gz"
+checksum=156d0df46bbe16296fb19b2f579f1690644eee0fb63d0159696892ff3ba14449
+
+build_options="bar"
+build_options_default="bar"
+desc_option_bar="Enable KWM's built-in bar"
