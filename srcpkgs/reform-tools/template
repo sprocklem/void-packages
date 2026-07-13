@@ -1,0 +1,112 @@
+# Template file for 'reform-tools'
+pkgname=reform-tools
+version=1.87
+revision=1
+archs="aarch64*"
+#build_wrksrc=
+#build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+#hostmakedepends=""
+#makedepends=""
+depends="cryptsetup lvm2 python3-libusb1 python3-psutil"
+short_desc="Tools for the MNT Reform"
+maintainer="Maeve Sproule <code@sprock.dev>"
+license="GPL-3.0-or-later"
+homepage="https://source.mnt.re/reform/reform-tools"
+changelog="https://source.mnt.re/reform/reform-tools/-/raw/main/CHANGELOG.md"
+distfiles="https://source.mnt.re/reform/reform-tools/-/archive/${version}/reform-tools-${version}.tar.gz"
+checksum=38e0f74970abca17e4f83ec39c7f5de29b8f30a36fa803f4c0da9cbd93aad551
+
+do_install() {
+	# Ideally, I would just use the gnu-makefile build style but this would
+	# currently fail because of reform-check/distro/void.sh not existing.
+
+	vmkdir usr/bin
+	vcopy 'bin/*' usr/bin
+	# XXX: Install machines, or in -tweaks.
+
+	# The local copies of the handbooks are not installed by any package.
+	rm ${DESTDIR}/usr/bin/pocket-reform-handbook
+	rm ${DESTDIR}/usr/bin/reform-handbook
+
+	# This invokes APT/dpkg-*.
+	# TODO: Convert this to xbps, where possible.
+	rm ${DESTDIR}/usr/bin/reform-emmc-bootstrap
+	rm ${DESTDIR}/usr/bin/reform-flash-bootloader
+
+	# These mess with the initramfs and do not currently support Void.
+	rm ${DESTDIR}/usr/bin/reform-boot-config
+	rm ${DESTDIR}/usr/bin/reform-display-config
+	rm ${DESTDIR}/usr/bin/reform-flash-rescue
+	rm ${DESTDIR}/usr/bin/reform-migrate
+	rm ${DESTDIR}/usr/bin/reform-setup-encrypted-disk
+
+	# This assumes the existence of an 'irc' program, which is not currently
+	# packaged.
+	# TODO: Figure out which program is (or possible programs are) being invoked.
+	rm ${DESTDIR}/usr/bin/reform-chat
+
+	# This is somewhat OS-specific.
+	# TODO: Investigate whether forcing offline mode produces a reasonable result.
+	# TODO: Install `reform-check/common.sh` and other scripts, once this is used.
+	rm ${DESTDIR}/usr/bin/reform-check
+
+	# I am unsure of the utility of this. I think it is handled by xbps-reconfigure
+	# (if it is not done automatically).
+	rm ${DESTDIR}/usr/bin/reform-config
+
+	# I am also unsure of the utility of these.
+	rm ${DESTDIR}/usr/bin/reform-gnome-config
+	rm ${DESTDIR}/usr/bin/reform-help
+	rm ${DESTDIR}/usr/bin/reform-pavucontrol
+	rm ${DESTDIR}/usr/bin/reform-waybar-icon-wedge
+
+	# These were renamed and do nothing.
+	rm ${DESTDIR}/usr/bin/reform-flash-uboot
+	rm ${DESTDIR}/usr/bin/reform-setup-encrypted-nvme
+}
+
+reform-tweaks_package() {
+	depends="alsa-utils"
+	short_desc="Tweaks and fixes for the MNT Reform"
+
+	pkg_install() {
+		# This was introduced for the A311D (BPi CM4), which has integrated wifi, and may be optional on other SoMs.
+		# TODO: Should we add similar for other network daemons?
+		vinstall NetworkManager/default-wifi-powersave-off.conf 644 usr/lib/NetworkManager/conf.d
+
+		vinstall audio/99-reform-audio.rules 644 usr/lib/udev/rules.d
+		vinstall audio/analog-input-reform.conf 644 usr/share/pulseaudio/alsa-mixer/paths
+		vinstall audio/asound.state 644 var/lib/alsa
+		vinstall audio/reform.conf 644 usr/share/pulseaudio/alsa-mixer/profile-sets
+		vinstall audio/reform-hdmi-audio-priority.conf 644 usr/share/wireplumber/wireplumber.conf.d
+		vinstall audio/ucm2.conf.d/rk3588-tlv320ai/HiFi.conf 644 usr/share/alsa/ucm2/conf.d/rk3588-tlv320ai
+		vinstall audio/ucm2.conf.d/rk3588-tlv320ai/rk3588-tlv320aic3100.conf 644 usr/share/alsa/ucm2/conf.d/rk3588-tlv320ai
+
+		# TODO: Is the KWin tweak only needed on kwin?
+		vmkdir etc/profile.d
+		vcopy 'etc/profile.d/*' etc/profile.d
+
+		# TODO: Port flash-kernel files.
+		# TODO: Port initramfs files.
+		# TODO: Port kernel files.
+		# TODO: Port kernel-install files.
+
+		# TODO: Are these all useful?
+		vmkdir usr/libexec/reform-tools
+		vcopy 'libexec/reform-tools/*' usr/libexec/reform-tools
+		vmove usr/bin/reform-hw-setup
+		vmove usr/bin/reform-standby
+
+		vinstall modprobe.d/reform.conf 644 usr/lib/modprobe.d
+
+		# TODO: Plymouth
+		# TODO: SystemD
+
+		vinstall udev/reform-ttymxc-wakeup.rules 644 usr/lib/udev/rules.d
+	}
+}
