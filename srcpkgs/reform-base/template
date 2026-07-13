@@ -1,10 +1,10 @@
 # Template file for 'reform-base'
 pkgname=reform-base
 version=1
-revision=1
+revision=2
 archs="aarch64*"
 metapackage="yes"
-depends="linux-base linux-reform linux-reform-headers reform2_lpc-dkms"
+depends="linux-base linux-reform linux-reform-headers reform2_lpc-dkms reform-tweaks"
 short_desc="MNT Reform base package"
 maintainer="Maeve Sproule <code@sprock.dev>"
 license="Public Domain"
