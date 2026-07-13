@@ -1,0 +1,15 @@
+# Template file for 'kwim'
+pkgname=kwim
+version=0.2.0
+revision=1
+archs="~i686* ~armv6l* ~armv7l"
+build_style=zig-build
+configure_args="-Dpie -Dllvm"
+hostmakedepends="pkg-config"
+makedepends="libxkbcommon-devel wayland-devel wayland-protocols"
+short_desc="WM-independent input manager for the River compositor"
+maintainer="Maeve Sproule <code@sprock.dev>"
+license="GPL-3.0-only"
+homepage="https://github.com/kewuaa/kwim"
+distfiles="https://github.com/kewuaa/kwim/archive/refs/tags/v${version}.tar.gz"
+checksum=334b3f272d3ff0ac1eb40a3d0fa705b86f0ddb487c481df3dd3e6db67010cfad
