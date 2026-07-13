@@ -1,0 +1,25 @@
+# Template file for 'fex-emu'
+pkgname=fex-emu
+version=2607
+revision=1
+archs="aarch64"
+build_style=cmake
+configure_args="-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DUSE_LINKER=lld
+ -DENABLE_LTO=True -DBUILD_TESTING=False -DENABLE_ASSERTIONS=False"
+hostmakedepends="clang git lld llvm pkg-config python3-packaging"
+makedepends="openssl-devel qt5-devel qt5-declarative-devel"
+short_desc="Fast linux usermode x86 and x64 emulator"
+maintainer="Maeve Sproule <code@sprock.dev>"
+license="MIT"
+homepage="https://fex-emu.com/"
+
+# We disable cross builds due to the custom (non-GCC) toolchain required.
+nocross="yes"
+
+do_fetch() {
+	git clone --recurse-submodules -b "FEX-${version}" https://github.com/FEX-Emu/FEX.git "fex-emu-${version}"
+}
+
+post_install() {
+	vlicense LICENSE
+}
