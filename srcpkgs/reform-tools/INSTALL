@@ -1,0 +1,4 @@
+if [ "$ACTION" = "post" ] && [ "$UPDATE" = "no" ] ; then
+	ln -sf /etc/sv/reform-hw-setup etc/runit/runsvdir/default
+	ln -sf /etc/sv/reform-power-daemon etc/runit/runsvdir/default
+fi

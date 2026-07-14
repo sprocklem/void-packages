@@ -1,7 +1,7 @@
 # Template file for 'reform-tools'
 pkgname=reform-tools
 version=1.87
-revision=1
+revision=2
 archs="aarch64*"
 #build_wrksrc=
 #build_style=gnu-configure
@@ -12,7 +12,7 @@ archs="aarch64*"
 #make_dirs="/var/log/dir 0755 root root"
 #hostmakedepends=""
 #makedepends=""
-depends="cryptsetup lvm2 python3-libusb1 python3-psutil"
+depends="cryptsetup lvm2 python3-psutil"
 short_desc="Tools for the MNT Reform"
 maintainer="Maeve Sproule <code@sprock.dev>"
 license="GPL-3.0-or-later"
@@ -21,13 +21,21 @@ changelog="https://source.mnt.re/reform/reform-tools/-/raw/main/CHANGELOG.md"
 distfiles="https://source.mnt.re/reform/reform-tools/-/archive/${version}/reform-tools-${version}.tar.gz"
 checksum=38e0f74970abca17e4f83ec39c7f5de29b8f30a36fa803f4c0da9cbd93aad551
 
+post_patch() {
+	# TODO: This will fail anyways, due to the lack of reform-qcacld2 drivers.
+	vsed -i "bin/reform-hw-setup" \
+		-e 's/^  KERNVER_EXACT=.*/  KERNVER_EXACT="$(uname -r)"/'
+}
+
 do_install() {
-	# Ideally, I would just use the gnu-makefile build style but this would
-	# currently fail because of reform-check/distro/void.sh not existing.
+	# TODO: Ideally, I would just use the gnu-makefile build style but this
+	# would currently fail because of reform-check/distro/void.sh not existing.
 
 	vmkdir usr/bin
 	vcopy 'bin/*' usr/bin
-	# XXX: Install machines, or in -tweaks.
+	# TODO: Move to -tweaks, when "kernel/" files are ported.
+	vmkdir usr/share/reform-tools
+	vcopy machines usr/share/reform-tools
 
 	# The local copies of the handbooks are not installed by any package.
 	rm ${DESTDIR}/usr/bin/pocket-reform-handbook
@@ -71,11 +79,12 @@ do_install() {
 }
 
 reform-tweaks_package() {
-	depends="alsa-utils"
+	depends="alsa-utils python3-libusb1"
 	short_desc="Tweaks and fixes for the MNT Reform"
 
 	pkg_install() {
-		# This was introduced for the A311D (BPi CM4), which has integrated wifi, and may be optional on other SoMs.
+		# This was introduced for the A311D (BPi CM4), which has integrated
+		# wifi, and may be optional on other SoMs.
 		# TODO: Should we add similar for other network daemons?
 		vinstall NetworkManager/default-wifi-powersave-off.conf 644 usr/lib/NetworkManager/conf.d
 
@@ -96,17 +105,31 @@ reform-tweaks_package() {
 		# TODO: Port kernel files.
 		# TODO: Port kernel-install files.
 
+		vmkdir usr/libexec
 		# TODO: Are these all useful?
-		vmkdir usr/libexec/reform-tools
-		vcopy 'libexec/reform-tools/*' usr/libexec/reform-tools
-		vmove usr/bin/reform-hw-setup
+		vcopy libexec/reform-tools usr/libexec
+		# TODO: These are probably in the wrong folder.
 		vmove usr/bin/reform-standby
+		vmove usr/bin/reform-hw-setup
+
+		# This is used by "reform-power-daemon".
+		vmove usr/bin/reform-mcu-tool
+
+		# TODO: Ideally, reform-hw-setup would be run in core-services (as a
+		# one-shot). Unfortunately, my initial attempts did not seem to work. I
+		# am unsure why not, but my guess would be that it was running too
+		# early, somehow.
+		vsv reform-hw-setup
+		vsv reform-power-daemon
+
+		# TODO: Figure out how to disable hibernation and, on non–i.MX 8MQ,
+		# sleep.
+		vinstall udev/reform-ttymxc-wakeup.rules 644 usr/lib/udev/rules.d
+		vinstall ${FILESDIR}/reform-suspend 755 etc/zzz.d/suspend
+		vinstall ${FILESDIR}/reform-resume 755 etc/zzz.d/resume
 
 		vinstall modprobe.d/reform.conf 644 usr/lib/modprobe.d
 
 		# TODO: Plymouth
-		# TODO: SystemD
-
-		vinstall udev/reform-ttymxc-wakeup.rules 644 usr/lib/udev/rules.d
 	}
 }
