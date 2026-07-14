@@ -1,0 +1,7 @@
+#!/bin/sh
+exec 2>&1
+if [ "$(cat /proc/device-tree/model)" = "MNT Pocket Reform with RCORE RK3588 Module" ] ; then
+	exec /usr/libexec/reform-tools/reform-power-daemon
+else
+	exec chpst -b reform-power-daemon pause
+fi
