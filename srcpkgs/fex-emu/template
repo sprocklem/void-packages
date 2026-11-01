@@ -1,17 +1,19 @@
 # Template file for 'fex-emu'
 pkgname=fex-emu
-version=2607
+version=2610
 revision=1
 archs="aarch64"
 build_style=cmake
 configure_args="-DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DUSE_LINKER=lld
- -DENABLE_LTO=True -DBUILD_TESTING=False -DENABLE_ASSERTIONS=False"
+ -DENABLE_LTO=True -DBUILD_TESTING=False -DENABLE_ASSERTIONS=False -DUSE_LEGACY_BINFMTMISC=True"
 hostmakedepends="clang git lld llvm pkg-config python3-packaging"
-makedepends="openssl-devel qt5-devel qt5-declarative-devel"
+makedepends="openssl-devel qt6-declarative-devel"
+depends="squashfs-tools squashfuse"
 short_desc="Fast linux usermode x86 and x64 emulator"
 maintainer="Maeve Sproule <code@sprock.dev>"
 license="MIT"
 homepage="https://fex-emu.com/"
+conflicts="qemu-user-i386 qemu-user-amd64" # Provides conflicting binfmts.
 
 # We disable cross builds due to the custom (non-GCC) toolchain required.
 nocross="yes"
