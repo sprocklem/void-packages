@@ -1,8 +1,8 @@
 # Template file for 'steam'
 pkgname=steam
 version=1.0.0.87
-revision=1
-archs="i686 x86_64"
+revision=2
+archs="i686 x86_64 aarch64"
 depends="zenity xz curl dbus freetype gdk-pixbuf hicolor-icon-theme desktop-file-utils
  liberation-fonts-ttf file tar bash coreutils lsof steam-udev-rules"
 short_desc="Digital distribution client bootstrap package - Valve's steam client"
@@ -12,6 +12,10 @@ homepage="https://steampowered.com/"
 distfiles="http://repo.steampowered.com/steam/pool/steam/s/steam/steam_${version}.tar.gz"
 checksum=649375d2f9377f8009aaf3e2ff09978041eb9114897d9c5a3886f1d82e27ba1f
 repository=nonfree
+
+if [ "${XBPS_TARGET_MACHINE}" = "aarch64" ] ; then
+	depends+=" fex-emu"
+fi
 
 do_install() {
 	make DESTDIR=${DESTDIR} install
