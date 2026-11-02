@@ -1,0 +1,2 @@
+site="https://github.com/FEX-Emu/FEX/releases/"
+pattern='FEX Release FEX-\K\d+'
