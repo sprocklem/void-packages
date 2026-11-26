@@ -1,0 +1,2 @@
+site="https://source.mnt.re/reform/linux/-/branches/all"
+pattern='mnt-v\K[\d.]+'
