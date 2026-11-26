@@ -1,13 +1,13 @@
 # Template file for 'linux-reform'
 pkgname=linux-reform
-version=7.0.14
+version=7.1.13
 revision=1
 short_desc="Linux kernel and modules for MNT Reform"
 maintainer="Maeve Sproule <code@sprock.dev>"
 license="GPL-2.0-only"
 homepage="https://www.kernel.org"
 
-_reform_commit="9673a4150673da23a001d05639f1da544d34c4a5"
+_reform_commit="052a2d9920cfadacefe698c4edbe4342f48df40c"
 
 case "${version##*.}" in
 rc*) distfiles="https://git.kernel.org/torvalds/t/linux-${version%.*}-${version##*.}.tar.gz" ;;
@@ -20,9 +20,9 @@ rc*) distfiles="https://git.kernel.org/torvalds/t/linux-${version%.*}-${version#
 esac
 distfiles+=" https://source.mnt.re/reform/reform-debian-packages/-/archive/${_reform_commit}/reform-debian-packages-${_reform_commit}.tar.bz2"
 
-checksum="bb7f6d80b387c757b7d14bb93028fcb90f793c5c0d367736ee815a100b3891f0
- 03872ba37505da86fc75ac091141a4b76ba47bb4d99fbe1507ee075bc74eb2fa
- 7d7b66b813b93d2ae66329e33ce01c2c43701d46f9f41b46b4903f6e4c7ccbbf"
+checksum="691f44797fbe790dc8a321604c927087526ad27b6d649925d60f8eed0a2564a0
+ bc26984f42f51d354aeacc4eeb3e551638ba20459bace18de38687f24315f470
+ ed36a36394faff432bb2aba9b9b8f0c436f4ca27e4625448757cc8e414f33d5c"
 
 python_version=3
 
