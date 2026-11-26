@@ -1,7 +1,7 @@
 # Template file for 'reform-tools'
 pkgname=reform-tools
-version=1.87
-revision=3
+version=1.89
+revision=1
 archs="aarch64*"
 #build_wrksrc=
 #build_style=gnu-configure
@@ -19,7 +19,7 @@ license="GPL-3.0-or-later"
 homepage="https://source.mnt.re/reform/reform-tools"
 changelog="https://source.mnt.re/reform/reform-tools/-/raw/main/CHANGELOG.md"
 distfiles="https://source.mnt.re/reform/reform-tools/-/archive/${version}/reform-tools-${version}.tar.gz"
-checksum=38e0f74970abca17e4f83ec39c7f5de29b8f30a36fa803f4c0da9cbd93aad551
+checksum=500a8953cc0b53907d77afd84c29d83b3c55fcf9b765956796797cdeb7221672
 
 post_patch() {
 	# TODO: This will fail anyways, due to the lack of reform-qcacld2 drivers.
@@ -36,10 +36,6 @@ do_install() {
 	# TODO: Move to -tweaks, when "kernel/" files are ported.
 	vmkdir usr/share/reform-tools
 	vcopy machines usr/share/reform-tools
-
-	# The local copies of the handbooks are not installed by any package.
-	rm ${DESTDIR}/usr/bin/pocket-reform-handbook
-	rm ${DESTDIR}/usr/bin/reform-handbook
 
 	# This invokes APT/dpkg-*.
 	# TODO: Convert this to xbps, where possible.
@@ -91,10 +87,12 @@ reform-tweaks_package() {
 		vinstall audio/99-reform-audio.rules 644 usr/lib/udev/rules.d
 		vinstall audio/analog-input-reform.conf 644 usr/share/pulseaudio/alsa-mixer/paths
 		vinstall audio/asound.state 644 var/lib/alsa
-		vinstall audio/reform.conf 644 usr/share/pulseaudio/alsa-mixer/profile-sets
 		vinstall audio/reform-hdmi-audio-priority.conf 644 usr/share/wireplumber/wireplumber.conf.d
+		vinstall audio/reform.conf 644 usr/share/pulseaudio/alsa-mixer/profile-sets
 		vinstall audio/ucm2.conf.d/rk3588-tlv320ai/HiFi.conf 644 usr/share/alsa/ucm2/conf.d/rk3588-tlv320ai
 		vinstall audio/ucm2.conf.d/rk3588-tlv320ai/rk3588-tlv320aic3100.conf 644 usr/share/alsa/ucm2/conf.d/rk3588-tlv320ai
+
+		# TODO: Add pocket reform dracut.
 
 		# TODO: Is the KWin tweak only needed on kwin?
 		vmkdir etc/profile.d
